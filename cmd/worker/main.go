@@ -282,13 +282,13 @@ func main() {
 		}
 	}
 	if syncerIntervalStr := os.Getenv("SYNCER_INTERVAL_SECONDS"); len(syncerIntervalStr) != 0 {
-		if syncerInterval, Err := strconv.Atoi(syncerIntervalStr); Err != nil {
+		if gisyncerInterval, Err := strconv.Atoi(syncerIntervalStr); Err != nil {
 			logger.Err(Err).Msgf("Incorrect value for SYNCER_INTERVAL_SECONDS")
 		}
 	}
-	go scheduler.New(&logger, pool).Start(ctx, schedulerInterval*time.Minute)
+	go scheduler.New(&logger, pool).Start(ctx, time.Duration(schedulerInterval)*time.Minute)
 	go timeout.New(&logger, pool).Start(ctx, time.Minute)
-	go syncer.New(pool, embedded, &logger, concurrency, syncerInterval*time.Second).Start(ctx)
+	go syncer.New(pool, embedded, &logger, concurrency, time.Duration(syncerInterval)*time.Second).Start(ctx)
 
 	// run a basic cron every minute to schedule a repos/auto-import job
 	// these jobs are idempotent, and so, multiple instances can run at same time without conflict
