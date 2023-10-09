@@ -278,12 +278,12 @@ func main() {
 
 	if schedulerIntervalStr := os.Getenv("SCHEDULER_INTERVAL_MINUTES"); len(schedulerIntervalStr) != 0 {
 		if schedulerInterval, err = strconv.Atoi(schedulerIntervalStr); err != nil {
-			logger.Err(Err).Msgf("Incorrect value for SCHEDULER_INTERVAL_MINUTES")
+			logger.Err(err).Msgf("Incorrect value for SCHEDULER_INTERVAL_MINUTES")
 		}
 	}
 	if syncerIntervalStr := os.Getenv("SYNCER_INTERVAL_SECONDS"); len(syncerIntervalStr) != 0 {
 		if syncerInterval, err = strconv.Atoi(syncerIntervalStr); err != nil {
-			logger.Err(Err).Msgf("Incorrect value for SYNCER_INTERVAL_SECONDS")
+			logger.Err(err).Msgf("Incorrect value for SYNCER_INTERVAL_SECONDS")
 		}
 	}
 	go scheduler.New(&logger, pool).Start(ctx, schedulerInterval*time.Minute)
